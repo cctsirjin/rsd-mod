@@ -13,11 +13,11 @@
 
 
 # Specify the root directory where you checked out RSD.
-export RSD_ROOT=~/work/rsd-git/
+export RSD_ROOT=/rsd-mod
 
 
 # Specify the path of a directory that contains a gcc cross compiler binary for RISC-V. 
-export RSD_GCC_PATH=/opt/gcc/riscv/7.1.0/bin
+export RSD_GCC_PATH=/opt/riscv/bin
 # Specify the prefix of the file name of the compiler binary.
 export RSD_GCC_PREFIX=riscv32-unknown-elf-
 
@@ -32,7 +32,7 @@ export SYNOPSYS_BIN=~/opt/cad/synopsys/fpga_M-2017.03-SP1/bin/
 export RSD_DC_SHELL_BIN=~/opt/cad/synopsys/O-2018.06-SP4/bin/dc_shell
 
 # Specify the path of a "verilator" binary
-export RSD_VERILATOR_BIN=verilator
+export RSD_VERILATOR_BIN=/verilator/bin/verilator
 
 # Specify the ISE folder in Vivado.
 export RSD_VIVADO=~/opt/cad/xilinx/Vivado/2019.2/ids_lite/ISE
