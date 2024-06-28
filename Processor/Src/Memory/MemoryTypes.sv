@@ -19,7 +19,8 @@ import MemoryMapTypes::*;
         localparam MEMORY_ADDR_BIT_SIZE = 18; // 256KB
     `endif
 `else
-        localparam MEMORY_ADDR_BIT_SIZE = 25; // 512KB
+//        localparam MEMORY_ADDR_BIT_SIZE = 25; // 512KB
+        localparam MEMORY_ADDR_BIT_SIZE = 32; // 512KB, 25=3(for Byte conversion)+10(for Kilo conversion)+3(ROM/RAM, uncachable, I/O)+9(512 aka 0.5M). If it is 32 bit it will have 16(32M).B
 `endif
 
 localparam MEMORY_BYTE_SIZE = 1 << MEMORY_ADDR_BIT_SIZE;

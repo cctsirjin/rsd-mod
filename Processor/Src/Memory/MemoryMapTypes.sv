@@ -24,7 +24,7 @@ localparam PC_GOAL = 32'h80001004;
 //
 
  // This option compresses PC to 19 bits for reducing resource consumption.
-`define RSD_NARROW_PC
+//`define RSD_NARROW_PC // CcT: Comment this out to provide room for RAM expansion.
 // The PC compression is achieved by leveraging the memory map.
 // The memory map in the logical address space is as follows.
 //       0x0000_1000 --0x0000_FFFF: Section 0 (ROM)
@@ -83,7 +83,7 @@ typedef enum logic[1:0]  {
 // Physical Address
 // The most significant two bits of the physical memory address is used distinguish between 
 // accesses to a normal memory region, memory-mapped IO region, and uncachable region.
-localparam PHY_ADDR_WIDTH = 22;  // 22 bits: 1bit uncachable flag + 1bit IO flag + 1MB memory space
+localparam PHY_ADDR_WIDTH = 32;  // now 16+14+2, originally 22=16+4+2 bits: 1bit uncachable flag + 1bit IO flag + 1MB memory space
 localparam PHY_ADDR_WIDTH_BIT_SIZE = $clog2(PHY_ADDR_WIDTH);
 localparam PHY_ADDR_BYTE_WIDTH = PHY_ADDR_WIDTH / BYTE_WIDTH;
 
@@ -115,23 +115,34 @@ localparam LOG_ADDR_SECTION_0_ADDR_BIT_WIDTH = 16;
 // Ignore 0x1000 so that the lower address bits can be added as it is
 localparam PHY_ADDR_SECTION_0_BASE = PHY_RAW_ADDR_WIDTH'('h0_0000);
 
-
-//
+// Originally:
 // Section 1 (RAM?)
-// logical [0x8000_0000 - 0x8003_ffff] -> physical [0x1_0000 - 0x4_ffff]
+// logical [0x8000_0000 - 0x8003_ffff] -> physical [0x0001_0000 - 0x0004_ffff]
 //
+
+// Now:
+// Section 1 (RAM?)
+// logical [0x8000_0000 - 0x9fff_ffff] -> physical [0x0001_0000 - 0x1fff_ffff]
+//
+
 localparam LOG_ADDR_SECTION_1_BEGIN = ADDR_WIDTH'('h8000_0000);
-localparam LOG_ADDR_SECTION_1_END   = ADDR_WIDTH'('h8004_0000);
-localparam LOG_ADDR_SECTION_1_ADDR_BIT_WIDTH = 18;
+localparam LOG_ADDR_SECTION_1_END   = ADDR_WIDTH'('ha000_0000);
+localparam LOG_ADDR_SECTION_1_ADDR_BIT_WIDTH = 29;
 localparam PHY_ADDR_SECTION_1_BASE = PHY_RAW_ADDR_WIDTH'('h1_0000);
 
-//
+// Originally:
 // Uncachable section (RAM?)
-// logical [0x8004_0000 - 0x8004_ffff] -> uncachable [0x5_0000 -> 0x5_ffff]
+// logical [0x8004_0000 - 0x8004_ffff] -> uncachable [0x0005_0000 -> 0x0005_ffff]
 //
-localparam LOG_ADDR_UNCACHABLE_BEGIN = ADDR_WIDTH'('h8004_0000);
-localparam LOG_ADDR_UNCACHABLE_END   = ADDR_WIDTH'('h8005_0000);
-localparam LOG_ADDR_UNCACHABLE_ADDR_BIT_WIDTH = 19;
+
+// Now:
+// Uncachable section (RAM?)
+// logical [0xa000_0000 - 0xbfff_ffff] -> uncachable [0x2000_0000 -> 0x2fff_ffff]
+//
+
+localparam LOG_ADDR_UNCACHABLE_BEGIN = ADDR_WIDTH'('ha000_0000);
+localparam LOG_ADDR_UNCACHABLE_END   = ADDR_WIDTH'('hc000_0000);
+localparam LOG_ADDR_UNCACHABLE_ADDR_BIT_WIDTH = 30;
 
 // Ignore 0x1000 so that the lower address bits can be added as it is
 localparam PHY_ADDR_UNCACHABLE_BASE = PHY_RAW_ADDR_WIDTH'('h1_0000);
