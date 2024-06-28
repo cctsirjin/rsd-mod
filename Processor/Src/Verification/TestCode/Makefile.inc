@@ -64,6 +64,7 @@ CFLAGS = \
 	-nostartfiles \
 	-mstrict-align \
 	-march=rv32imf \
+        -mabi=ilp32f \
 
 LDFLAGS= \
 	-static \
