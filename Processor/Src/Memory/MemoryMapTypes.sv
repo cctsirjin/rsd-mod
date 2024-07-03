@@ -128,7 +128,9 @@ localparam PHY_ADDR_SECTION_0_BASE = PHY_RAW_ADDR_WIDTH'('h0_0000);
 localparam LOG_ADDR_SECTION_1_BEGIN = ADDR_WIDTH'('h8000_0000);
 localparam LOG_ADDR_SECTION_1_END   = ADDR_WIDTH'('h9000_0000);
 localparam LOG_ADDR_SECTION_1_ADDR_BIT_WIDTH = 28;
-localparam PHY_ADDR_SECTION_1_BASE = PHY_RAW_ADDR_WIDTH'('h1000_0000);
+
+// Ignore 0x1000 so that the lower address bits can be added as it is
+localparam PHY_ADDR_SECTION_1_BASE = PHY_RAW_ADDR_WIDTH'('h1_0000);
 
 // Originally:
 // Uncachable section (RAM?)
@@ -145,7 +147,7 @@ localparam LOG_ADDR_UNCACHABLE_END   = ADDR_WIDTH'('ha000_0000);
 localparam LOG_ADDR_UNCACHABLE_ADDR_BIT_WIDTH = 29;
 
 // Ignore 0x1000 so that the lower address bits can be added as it is
-localparam PHY_ADDR_UNCACHABLE_BASE = PHY_RAW_ADDR_WIDTH'('h1000_0000);
+localparam PHY_ADDR_UNCACHABLE_BASE = PHY_RAW_ADDR_WIDTH'('h1_0000);
 
 //
 // --- Serial IO
