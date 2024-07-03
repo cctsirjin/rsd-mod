@@ -19,8 +19,8 @@ import MemoryMapTypes::*;
         localparam MEMORY_ADDR_BIT_SIZE = 18; // 256KB
     `endif
 `else
-//        localparam MEMORY_ADDR_BIT_SIZE = 25; // 512KB
-        localparam MEMORY_ADDR_BIT_SIZE = 32; // 512KB, 25=3(for Byte conversion)+10(for Kilo conversion)+3(ROM/RAM, uncachable, I/O)+9(512 aka 0.5M). If it is 32 bit it will have 16(32M).B
+//        localparam MEMORY_ADDR_BIT_SIZE = 25; // 512KB because of address compression into 19 bit
+        localparam MEMORY_ADDR_BIT_SIZE = 32; // 512MB. See calculations below.
 `endif
 
 localparam MEMORY_BYTE_SIZE = 1 << MEMORY_ADDR_BIT_SIZE;
@@ -33,10 +33,10 @@ localparam DUMMY_HEX_ENTRY_NUM = 256;
 
 // Memory Entry Size
 localparam MEMORY_ENTRY_BIT_NUM /*verilator public*/ = 64; // Bit width of each memory entry
-localparam MEMORY_ENTRY_BYTE_NUM = MEMORY_ENTRY_BIT_NUM / BYTE_WIDTH;
-localparam MEMORY_ADDR_MSB = MEMORY_ADDR_BIT_SIZE - 1;
-localparam MEMORY_ADDR_LSB = $clog2( MEMORY_ENTRY_BYTE_NUM );
-localparam MEMORY_INDEX_BIT_WIDTH = MEMORY_ADDR_MSB - MEMORY_ADDR_LSB + 1;
+localparam MEMORY_ENTRY_BYTE_NUM = MEMORY_ENTRY_BIT_NUM / BYTE_WIDTH; // always 8
+localparam MEMORY_ADDR_MSB = MEMORY_ADDR_BIT_SIZE - 1; // If it is 25 -1 = 24,
+localparam MEMORY_ADDR_LSB = $clog2( MEMORY_ENTRY_BYTE_NUM ); // always 3
+localparam MEMORY_INDEX_BIT_WIDTH = MEMORY_ADDR_MSB - MEMORY_ADDR_LSB + 1; // then here this index is 24 - 3 + 1 = 22  
 localparam MEMORY_ENTRY_NUM /*verilator public*/ = (1 << MEMORY_INDEX_BIT_WIDTH);
 typedef logic [ MEMORY_ENTRY_BIT_NUM-1:0 ] MemoryEntryDataPath;
 

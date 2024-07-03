@@ -7,7 +7,7 @@ ENTRY(_start);
 
 MEMORY {
     ROM(rxai) :     ORIGIN = 0x00001000, LENGTH = 32k
-    RAM(wa) :       ORIGIN = 0x80000000, LENGTH = 32M /*Originally 32k*/
+    RAM(wa) :       ORIGIN = 0x80000000, LENGTH = 256M /*Originally 32k, later 32M, now 256M for redundancy*/
 }
 
 SECTIONS
