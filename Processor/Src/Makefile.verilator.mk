@@ -5,11 +5,11 @@ ENABLE_PC_GOAL = 1
 #TEST_CODE = Verification/TestCode/Asm/FP
 #TEST_CODE = Verification/TestCode/C/FP
 #TEST_CODE = Verification/TestCode/C/HelloWorld
-TEST_CODE = Verification/TestCode/C/rsd-attacks
+#TEST_CODE = Verification/TestCode/C/rsd-attacks
 #TEST_CODE = Verification/TestCode/C/Fibonacci
 #TEST_CODE = Verification/TestCode/C/PerfromanceCounter
 #TEST_CODE = Verification/TestCode/C/Exception
-
+TEST_CODE = Verification/TestCode/C/MDPBenchmark
 
 
 ifndef RSD_VERILATOR_BIN
