@@ -98,7 +98,7 @@ localparam CONF_MDT_ENTRY_NUM = 1024;   // The number of prediction table entrie
 localparam CONF_DCACHE_WAY_NUM = 2;
 
 // The number of index bits
-localparam CONF_DCACHE_INDEX_BIT_WIDTH = 9 - $clog2(CONF_DCACHE_WAY_NUM);   
+localparam CONF_DCACHE_INDEX_BIT_WIDTH = 12 - $clog2(CONF_DCACHE_WAY_NUM);   
 
 // Line size. This parameter must be a power of two.
 localparam CONF_DCACHE_LINE_BYTE_NUM = 8;     
