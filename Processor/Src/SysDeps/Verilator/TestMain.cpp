@@ -276,8 +276,10 @@ int main(int argc, char** argv) {
                 );
 
                 // Dump RSD.log for Kanata
-                if (enableDumpKanata){
-                    kanataDumper.DumpCycle(debugRegister);
+                if (enableDumpKanata && numCommittedMicroOp >= 1500000){
+//                if (enableDumpKanata){
+
+                   	 kanataDumper.DumpCycle(debugRegister);
                 }
 
                 if (enableDumpRegCSV) {
