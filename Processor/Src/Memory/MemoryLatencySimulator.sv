@@ -75,6 +75,7 @@ output
                 randNext = randNext ^ (randNext << 13); 
                 randNext = randNext ^ (randNext >> 17);
                 randNext = randNext ^ (randNext << 5);
+//                randNext = 10000; //100
 
                 // for debug
                 //$display("Latency set to %d", randNext % MEM_LATENCY_SIM_LATENCY_FLUCTUATION_RANGE);
