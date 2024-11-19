@@ -201,7 +201,7 @@ int main(int argc, char** argv) {
                 mainMem[wordAddr + i] = word;
             }
             wordAddr += 4;
-        }    
+        }
         printf(
             "Loaded %s into a physical memory region [%x-%x].\n",
             fileName.c_str(),
@@ -217,7 +217,7 @@ int main(int argc, char** argv) {
     // 先頭 64KB は 論理空間の 0x0000_0000 - 0x0000_FFFF に，
     // 後続 64KB は 論理空間の 0x8000_0000 - 0x8000_FFFF に展開されることになる
     loadHexFile(codeFileName, mainMem, 0, true);
-    
+
 
     int numCommittedARM_Op = 0;
     int numCommittedMicroOp = 0;
@@ -227,7 +227,7 @@ int main(int argc, char** argv) {
 
 
     // TestBenchClockGenerator にあわせる
-    const int RSD_STEP = 8;   
+    const int RSD_STEP = 8;
     const int RSD_KANATA_CYCLE_DISPLACEMENT = -1;
     const int RSD_INITIALIZATION_CYCLE = 8;
     int64_t cycle = -1;
@@ -276,8 +276,8 @@ int main(int argc, char** argv) {
                 );
 
                 // Dump RSD.log for Kanata
-                if (enableDumpKanata && numCommittedMicroOp >= 1500000){
-//                if (enableDumpKanata){
+//                if (enableDumpKanata && numCommittedMicroOp >= 1500000){
+                if (enableDumpKanata){
 
                    	 kanataDumper.DumpCycle(debugRegister);
                 }
