@@ -877,6 +877,7 @@ endmodule : DCacheArray
 
 //
 // Data cache main module.
+// CcT: Add a counter.
 //
 module DCache(
     LoadStoreUnitIF.DCache lsu,
@@ -891,6 +892,7 @@ module DCache(
     logic missIsUncachable[DCACHE_LSU_PORT_NUM];
     ActiveListIndexPath missActiveListPtr[DCACHE_LSU_PORT_NUM];
 
+    logic [7:0] mshrDelayCounter;  // CcT: Counter for delay cycles
 
     // Tag array
     DCacheIF port(lsu.clk, lsu.rst, lsu.rstStart);
@@ -971,6 +973,7 @@ module DCache(
                 lsuCacheGrtReg[i] <= FALSE;
             end
             dcWriteReqReg <= '0;
+            mshrDelayCounter <= 'd8; // CcT: Initialize MSHR delay counter
         end
         else begin
             lsuCacheGrtReg <= port.lsuCacheGrt;
@@ -1171,6 +1174,13 @@ module DCache(
                     // An access with the same index cannot enter to the MSHR.
                     mshrConflict[i] = TRUE;
                 end
+            end
+			// CcT: It is advised to delay MSHR action here, before entering phases of the MSHR FSM.
+		    for (int j = 0; j < LOAD_ISSUE_WIDTH; j++) begin
+                if (loadStoreUnit.storeLoadForwarded[j] && mshrDelayCounter) begin
+                    mshrConflict[i] = FALSE;
+                    mshrDelayCounter = mshrDelayCounter - 1;
+			    end
             end
         end
 
