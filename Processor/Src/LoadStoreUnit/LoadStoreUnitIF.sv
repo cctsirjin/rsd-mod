@@ -145,6 +145,7 @@ interface LoadStoreUnitIF( input logic clk, rst, rstStart );
         dcReadUncachable,
         dcReadActiveListPtr,
         makeMSHRCanBeInvalidDirect,
+        storeLoadForwarded, // CcT: Add STL signal.
     output
         dcReadHit,
         dcReadBusy,

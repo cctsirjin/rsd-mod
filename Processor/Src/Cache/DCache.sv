@@ -948,6 +948,8 @@ module DCache(
     //
     logic lsuMakeMSHRCanBeInvalidDirect[MSHR_NUM];
 
+    logic lsuStoreLoadForwarded[DCACHE_LSU_READ_PORT_NUM]; // CcT: Add input register. DCACHE_LSU_READ_PORT_NUM = LOAD_ISSUE_WIDTH
+
 `ifndef RSD_SYNTHESIS
     `ifndef RSD_VIVADO_SIMULATION
         // Don't care these values, but avoiding undefined status in Questa.
@@ -974,6 +976,9 @@ module DCache(
             end
             dcWriteReqReg <= '0;
             mshrDelayCounter <= 'd8; // CcT: Initialize MSHR delay counter
+        end
+        else if (!mshrDelayCounter) begin
+            mshrDelayCounter <= 'd8; // CcT: Reset MSHR delay counter if it is zero.
         end
         else begin
             lsuCacheGrtReg <= port.lsuCacheGrt;
@@ -1176,8 +1181,8 @@ module DCache(
                 end
             end
 			// CcT: It is advised to delay MSHR action here, before entering phases of the MSHR FSM.
-		    for (int j = 0; j < LOAD_ISSUE_WIDTH; j++) begin
-                if (loadStoreUnit.storeLoadForwarded[j] && mshrDelayCounter) begin
+		    for (int j = 0; j < DCACHE_LSU_READ_PORT_NUM; j++) begin
+                if (lsuStoreLoadForwarded[j] && mshrDelayCounter) begin
                     mshrConflict[i] = FALSE;
                     mshrDelayCounter = mshrDelayCounter - 1;
 			    end
