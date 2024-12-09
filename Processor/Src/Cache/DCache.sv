@@ -1181,7 +1181,11 @@ module DCache(
                 end
             end
 			// CcT: It is advised to delay MSHR action here, before entering phases of the MSHR FSM.
+//            for (int j = 0; j < DCACHE_LSU_READ_PORT_NUM; j++) begin
+//                lsuStoreLoadForwarded[j] = lsu.storeLoadForwarded[j];
+//            end
 		    for (int j = 0; j < DCACHE_LSU_READ_PORT_NUM; j++) begin
+                lsuStoreLoadForwarded[j] = lsu.storeLoadForwarded[j];
                 if (lsuStoreLoadForwarded[j] && mshrDelayCounter) begin
                     mshrConflict[i] = FALSE;
                     mshrDelayCounter = mshrDelayCounter - 1;
