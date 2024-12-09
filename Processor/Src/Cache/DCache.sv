@@ -980,9 +980,9 @@ module DCache(
         else if (!mshrDelayCounter) begin
             mshrDelayCounter <= 'd8; // CcT: Reset MSHR delay counter if it is zero.
         end
-        mshrDelayCounterReg <= mshrDelayCounter; // CcT: Assign value.
         else begin
             lsuCacheGrtReg <= port.lsuCacheGrt;
+            mshrDelayCounterReg <= mshrDelayCounter; // CcT: Assign value.
 
             for (int i = 0; i < DCACHE_LSU_READ_PORT_NUM; i++) begin
                 dcReadReqReg[i] <= lsu.dcReadReq[i];
