@@ -947,8 +947,8 @@ module DCache(
     logic lsuMakeMSHRCanBeInvalidDirect[MSHR_NUM];
 
     logic lsuStoreLoadForwarded[DCACHE_LSU_READ_PORT_NUM]; // CcT: Add input register. DCACHE_LSU_READ_PORT_NUM = LOAD_ISSUE_WIDTH
-    logic [7:0] mshrDelayCounter;  // CcT: Counter for delay cycles in sequential blocks.
-    logic [7:0] mshrDelayCounterReg;  // CcT: Register for delay cycles used in combination blocks.
+    logic [15:0] mshrDelayCounter;  // CcT: Counter for delay cycles in sequential blocks.
+    logic [15:0] mshrDelayCounterReg;  // CcT: Register for delay cycles used in combination blocks.
 
 `ifndef RSD_SYNTHESIS
     `ifndef RSD_VIVADO_SIMULATION
@@ -975,10 +975,10 @@ module DCache(
                 lsuCacheGrtReg[i] <= FALSE;
             end
             dcWriteReqReg <= '0;
-            mshrDelayCounter <= 'hFF; // CcT: Initialize MSHR delay counter
+            mshrDelayCounter <= 'hFFFF; // CcT: Initialize MSHR delay counter
         end
         else if (!mshrDelayCounter) begin
-            mshrDelayCounter <= 'hFF; // CcT: Reset MSHR delay counter if it is zero.
+            mshrDelayCounter <= 'hFFFF; // CcT: Reset MSHR delay counter if it is zero.
         end
         else begin
             lsuCacheGrtReg <= port.lsuCacheGrt;
