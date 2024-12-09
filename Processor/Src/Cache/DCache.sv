@@ -947,8 +947,8 @@ module DCache(
     logic lsuMakeMSHRCanBeInvalidDirect[MSHR_NUM];
 
     logic lsuStoreLoadForwarded[DCACHE_LSU_READ_PORT_NUM]; // CcT: Add input register. DCACHE_LSU_READ_PORT_NUM = LOAD_ISSUE_WIDTH
-    logic mshrDelayCounter[8];  // CcT: Counter for delay cycles in sequential blocks.
-    logic mshrDelayCounterReg[8];  // CcT: Register for delay cycles used in combination blocks.
+    logic [7:0] mshrDelayCounter;  // CcT: Counter for delay cycles in sequential blocks.
+    logic [7:0] mshrDelayCounterReg;  // CcT: Register for delay cycles used in combination blocks.
 
 `ifndef RSD_SYNTHESIS
     `ifndef RSD_VIVADO_SIMULATION
