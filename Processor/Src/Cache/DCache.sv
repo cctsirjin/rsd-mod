@@ -975,10 +975,10 @@ module DCache(
                 lsuCacheGrtReg[i] <= FALSE;
             end
             dcWriteReqReg <= '0;
-            mshrDelayCounter <= 8'h8; // CcT: Initialize MSHR delay counter
+            mshrDelayCounter <= 'hFF; // CcT: Initialize MSHR delay counter
         end
         else if (!mshrDelayCounter) begin
-            mshrDelayCounter <= 8'h8; // CcT: Reset MSHR delay counter if it is zero.
+            mshrDelayCounter <= 'hFF; // CcT: Reset MSHR delay counter if it is zero.
         end
         else begin
             lsuCacheGrtReg <= port.lsuCacheGrt;
