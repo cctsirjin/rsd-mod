@@ -892,8 +892,6 @@ module DCache(
     logic missIsUncachable[DCACHE_LSU_PORT_NUM];
     ActiveListIndexPath missActiveListPtr[DCACHE_LSU_PORT_NUM];
 
-    logic [7:0] mshrDelayCounter;  // CcT: Counter for delay cycles
-
     // Tag array
     DCacheIF port(lsu.clk, lsu.rst, lsu.rstStart);
 
@@ -949,6 +947,7 @@ module DCache(
     logic lsuMakeMSHRCanBeInvalidDirect[MSHR_NUM];
 
     logic lsuStoreLoadForwarded[DCACHE_LSU_READ_PORT_NUM]; // CcT: Add input register. DCACHE_LSU_READ_PORT_NUM = LOAD_ISSUE_WIDTH
+    logic [7:0] mshrDelayCounter;  // CcT: Counter for delay cycles
 
 `ifndef RSD_SYNTHESIS
     `ifndef RSD_VIVADO_SIMULATION
@@ -1188,7 +1187,7 @@ module DCache(
                 lsuStoreLoadForwarded[j] = lsu.storeLoadForwarded[j];
                 if (lsuStoreLoadForwarded[j] && mshrDelayCounter) begin
                     mshrConflict[i] = FALSE;
-                    mshrDelayCounter = mshrDelayCounter - 1;
+                    mshrDelayCounter <= mshrDelayCounter - 1;
 			    end
             end
         end
