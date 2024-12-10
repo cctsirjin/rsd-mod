@@ -1189,7 +1189,7 @@ module DCache(
                 mshrDelayCounterReg = mshrDelayCounter; // CcT: Assign value.
                 if (lsuStoreLoadForwarded[j] && mshrDelayCounterReg) begin
                     mshrConflict[i] = FALSE;
-                    mshrDelayCounterReg = mshrDelayCounterReg - 1;
+                    //mshrDelayCounterReg = mshrDelayCounterReg - 1;
 			    end
             end
         end
