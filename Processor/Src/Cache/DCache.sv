@@ -877,7 +877,6 @@ endmodule : DCacheArray
 
 //
 // Data cache main module.
-// CcT: Add a counter.
 //
 module DCache(
     LoadStoreUnitIF.DCache lsu,
@@ -1181,15 +1180,12 @@ module DCache(
                 end
             end
 			// CcT: It is advised to delay MSHR action here, before entering phases of the MSHR FSM.
-//            for (int j = 0; j < DCACHE_LSU_READ_PORT_NUM; j++) begin
-//                lsuStoreLoadForwarded[j] = lsu.storeLoadForwarded[j];
-//            end
 		    for (int j = 0; j < DCACHE_LSU_READ_PORT_NUM; j++) begin
                 lsuStoreLoadForwarded[j] = lsu.storeLoadForwarded[j];
                 mshrDelayCounterReg = mshrDelayCounter; // CcT: Assign value.
                 if (lsuStoreLoadForwarded[j] && mshrDelayCounterReg) begin
                     mshrConflict[i] = FALSE;
-                    //mshrDelayCounterReg = mshrDelayCounterReg - 1;
+                    mshrDelayCounterReg = mshrDelayCounterReg - 1;
 			    end
             end
         end
