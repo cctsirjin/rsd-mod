@@ -354,7 +354,8 @@ interface LoadStoreUnitIF( input logic clk, rst, rstStart );
     modport ReplayQueue(
     input
         mshrValid,
-        mshrPhase
+        mshrPhase,
+        lockAllocatingMSHR
     );
 
     modport CommitStage(

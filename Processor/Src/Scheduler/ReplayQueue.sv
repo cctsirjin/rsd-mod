@@ -156,6 +156,9 @@ module ReplayQueue(
     logic mshrValid[MSHR_NUM];
     MSHR_Phase mshrPhase[MSHR_NUM]; // MSHR phase.
 
+    // Lock replay for a certain cycle after MSHR lock
+    LockCyclesToReplayPath regCycles, nextCycles;
+
 `ifndef RSD_SYNTHESIS
     `ifndef RSD_VIVADO_SIMULATION
         // Don't care these values, but avoiding undefined status in Questa.
@@ -175,12 +178,25 @@ module ReplayQueue(
             replayReg <= '0;
             intervalIn <= '0;
             intervalCount <= '0;
+            regCycles <= '0;
         end
         else begin
             replayEntryReg <= nextReplayEntry;
             replayReg <= nextReplay;
             intervalIn <= nextIntervalIn;
             intervalCount <= nextIntervalCount;
+            regCycles <= nextCycles;
+            // $display("replay: %d regcycles: %d",nextReplay, regCycles);
+        end
+    end
+
+    always_comb begin
+        nextCycles = regCycles > 0 ? regCycles - 1 : 0;
+
+        for (int i = 0; i < LOAD_ISSUE_WIDTH; i++) begin
+            if (mshr.lockAllocatingMSHR[i]) begin
+                nextCycles = LOCK_CYCLES_TO_REPLAY;
+            end
         end
     end
 
@@ -497,6 +513,10 @@ module ReplayQueue(
         end
         else if (~replayEntryValidOut) begin
             // RQの先頭命令が無効なら必ずpopする　
+            popEntry = TRUE;
+        end
+        else if (regCycles > 0) begin
+            // Lock replay for a certain cycle
             popEntry = TRUE;
         end
         else begin

@@ -193,7 +193,10 @@ typedef struct packed // StoreQueueDataEntry
     LSQ_WordByteEnablePath byteWE;
 } StoreQueueDataEntry;
 
-localparam ENABLE_PREVENTING_SSB = FALSE;
+localparam ENABLE_PREVENTING_SSB = TRUE;
+localparam LOCK_CYCLES_TO_REPLAY = 5;
+localparam LOCK_CYCLES_TO_REPLAY_BIT_WIDTH = LOCK_CYCLES_TO_REPLAY > 0 ? $clog2(LOCK_CYCLES_TO_REPLAY) : 1;
+typedef logic [LOCK_CYCLES_TO_REPLAY_BIT_WIDTH-1:0] LockCyclesToReplayPath;
 
 
 endpackage
