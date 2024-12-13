@@ -321,7 +321,8 @@ module StoreQueue(
             end
 
             // Block allocating MSHR while there is a store with an unknown address
-            lockAllocatingMSHR[i] = port.executeLoad[i] && existUnknownStoreAddr[i];
+            lockAllocatingMSHR[i] = ENABLE_PREVENTING_SSB ? 
+                port.executeLoad[i] && existUnknownStoreAddr[i] : FALSE;
         end
 
         for (int i = 0; i < LOAD_ISSUE_WIDTH; i++) begin

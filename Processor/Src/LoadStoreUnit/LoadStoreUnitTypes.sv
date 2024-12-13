@@ -193,6 +193,8 @@ typedef struct packed // StoreQueueDataEntry
     LSQ_WordByteEnablePath byteWE;
 } StoreQueueDataEntry;
 
+localparam ENABLE_PREVENTING_SSB = FALSE;
+
 
 endpackage
 
