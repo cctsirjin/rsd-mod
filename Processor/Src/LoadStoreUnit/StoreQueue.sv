@@ -174,6 +174,10 @@ module StoreQueue(
     logic picked[LOAD_ISSUE_WIDTH];
     StoreQueueIndexPath executedStoreQueuePtrByLoad[LOAD_ISSUE_WIDTH];
 
+    // For preventing Spectre-SSB
+    logic existUnknownStoreAddr[LOAD_ISSUE_WIDTH];
+    logic lockAllocatingMSHR[LOAD_ISSUE_WIDTH];
+
     generate
         for(genvar i = 0; i < LOAD_ISSUE_WIDTH; i++) begin
             CircularRangePicker #(
@@ -293,6 +297,33 @@ module StoreQueue(
             end
         end
 
+        // For preventing Spectre-SSB
+        // Check if a store with an unknown address exists
+        // within the valid range of the store queue
+        for (int i = 0; i < LOAD_ISSUE_WIDTH; i++) begin
+            existUnknownStoreAddr[i] = FALSE;
+            for (int j = 0; j < STORE_QUEUE_ENTRY_NUM; j++) begin
+                //  |----h******L------|
+                if (headPtr <= executedStoreQueuePtrByLoad[i]) begin
+                    if (headPtr <= j && j < executedStoreQueuePtrByLoad[i]) begin
+                        if (!storeQueue[j].regValid || !storeQueue[j].finished) begin
+                            existUnknownStoreAddr[i] = TRUE;
+                        end
+                    end
+                end
+                else begin //  |******L----h*******|
+                    if (headPtr <= j || j < executedStoreQueuePtrByLoad[i]) begin
+                        if (!storeQueue[j].regValid || !storeQueue[j].finished) begin
+                            existUnknownStoreAddr[i] = TRUE;
+                        end
+                    end
+                end
+            end
+
+            // Block allocating MSHR while there is a store with an unknown address
+            lockAllocatingMSHR[i] = port.executeLoad[i] && existUnknownStoreAddr[i];
+        end
+
         for (int i = 0; i < LOAD_ISSUE_WIDTH; i++) begin
             // ロードのフォワーディングの依存元となるストアは1つに限られる。
             // ストアがwriteしてないバイトを、ロードがreadしようとした場合、
@@ -314,6 +345,7 @@ module StoreQueue(
         port.forwardedLoadData = forwardedLoadData;
         port.forwardMiss = forwardMiss;
         port.storeLoadForwarded = storeLoadForwarded;
+        port.lockAllocatingMSHR = lockAllocatingMSHR;
     end
 
     //
