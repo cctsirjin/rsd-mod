@@ -129,6 +129,10 @@ interface LoadStoreUnitIF( input logic clk, rst, rstStart );
     logic conflict [ STORE_ISSUE_WIDTH ];
     logic memAccessOrderViolation [ STORE_ISSUE_WIDTH ];
     PC_Path conflictLoadPC [ STORE_ISSUE_WIDTH ];
+
+    // Added for preventing Spectre-SSB
+    // logic existUnknownStoreAddr[LOAD_ISSUE_WIDTH];
+    logic lockAllocatingMSHR[LOAD_ISSUE_WIDTH];
     
     modport DCache(
     input
@@ -145,6 +149,7 @@ interface LoadStoreUnitIF( input logic clk, rst, rstStart );
         dcReadUncachable,
         dcReadActiveListPtr,
         makeMSHRCanBeInvalidDirect,
+        lockAllocatingMSHR,
     output
         dcReadHit,
         dcReadBusy,
@@ -224,7 +229,8 @@ interface LoadStoreUnitIF( input logic clk, rst, rstStart );
         retiredStoreLSQ_BlockAddr,
         storeQueueEmpty,
         storeQueueCount,
-        storeQueueHeadPtr
+        storeQueueHeadPtr,
+        lockAllocatingMSHR
     );
 
     modport StoreCommitter(
@@ -348,7 +354,8 @@ interface LoadStoreUnitIF( input logic clk, rst, rstStart );
     modport ReplayQueue(
     input
         mshrValid,
-        mshrPhase
+        mshrPhase,
+        lockAllocatingMSHR
     );
 
     modport CommitStage(

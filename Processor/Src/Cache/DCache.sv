@@ -1160,6 +1160,14 @@ module DCache(
 
         for (int i = 0; i < DCACHE_LSU_PORT_NUM; i++) begin
             mshrConflict[i] = port.lsuMuxTagOut[i].mshrConflict;
+
+            // For preventing Spectre-SSB
+            // Lock allocating MSHR by triggering mshrConflict
+            if (i < DCACHE_LSU_READ_PORT_NUM) begin
+                if (lsu.lockAllocatingMSHR[i]) begin
+                    mshrConflict[i] = TRUE;
+                end
+            end
         end
 
         // Check address conflict in missed access in this cycle.
