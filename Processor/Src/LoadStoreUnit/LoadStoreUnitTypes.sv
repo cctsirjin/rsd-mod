@@ -194,7 +194,9 @@ typedef struct packed // StoreQueueDataEntry
 } StoreQueueDataEntry;
 
 localparam ENABLE_PREVENTING_SSB = TRUE;
-    localparam LOCK_CYCLES_TO_REPLAY = 4; // CcT: This remains a WIP. For now it is statically adjusted acoording to the length of the secret string (e.g. value 4 for 5 characters "RISCV").
+localparam LOCK_CYCLES_TO_REPLAY = 4; // CcT: This remains a WIP. For now it is statically adjusted, acoording to the length of the secret string (e.g. value 4 for 5 characters "RISCV").
+// Too few cycles result in incomplete mitigation, while too many cycles lead to a deadlock.
+// The final effectiveness of the mitigation also varies depending on the execution environment and the hardware resources.
 localparam LOCK_CYCLES_TO_REPLAY_BIT_WIDTH = LOCK_CYCLES_TO_REPLAY > 0 ? $clog2(LOCK_CYCLES_TO_REPLAY) : 1;
 typedef logic [LOCK_CYCLES_TO_REPLAY_BIT_WIDTH-1:0] LockCyclesToReplayPath;
 
